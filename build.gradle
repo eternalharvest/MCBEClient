@@ -1,0 +1,57 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+group = 'jp.dip.hmy2001.mcbeClient'
+version = '1.0-SNAPSHOT'
+
+mainClassName = 'jp.dip.hmy2001.mcbeClient.Main'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "jline:jline:2.14.6"
+    compile "commons-logging:commons-logging:1.2"
+    compile "com.google.code.gson:gson:2.8.5"
+    compile "com.whirvis:jraknet:2.10.7"
+}
+
+run.doFirst {
+    throw new IllegalStateException('Please use `gradle shell` command instead')
+}
+
+task shell(dependsOn: testClasses, type: JavaExec) {
+    group = 'help'
+    description 'Runs an interactive shell with all runtime dependencies. "Use with gradle -q shell".'
+    
+    doFirst {
+        if (getProperty('org.gradle.daemon') == 'true') {
+            throw new IllegalStateException('Do not run shell with gradle daemon, it will eat your arrow keys.')
+        }
+    }
+    
+    standardInput = System.in
+    standardOutput = System.out
+    main = mainClassName
+    
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task release(type: Jar) {
+	manifest {
+		attributes "Main-Class": mainClassName,
+			'Implementation-Title': 'Phonotify',
+			'Implementation-Version': "$version",
+			'Build-Date': new Date().format("yyyy/MM/dd HH:mm:ssZ")
+	}
+
+	baseName = project.name
+
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+	with jar
+}
