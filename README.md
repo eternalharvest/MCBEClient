@@ -9,11 +9,24 @@ This software can connect to BDS, pmmp with offlinemode.
 * mvn install
 * cd ~/
 -->
-* git clone https://github.com/hmy2001/MCBEClient.git
-* cd MCBEClient
-* mvn package
-* cd target
-* java -jar MCBEClient-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+```bash
+user@localhost:~/work$ git clone https://github.com/hmy2001/MCBEClient.git
+user@localhost:~/work$ cd MCBEClient
+```
+
+Just type the command follows.
+
+```bash
+user@localhost:~/work/MCBEClient$ gradle shell
+```
+
+Or type following command to generate jar release archive
+
+```sh
+user@localhost:~/work/MCBEClient$ gradle release
+user@localhost:~/work/MCBEClient$ java -jar build/libs/MCBEClient-1.0-SNAPSHOT.jar
+```
 
 ## Features implemented
 * Login with offline mode
